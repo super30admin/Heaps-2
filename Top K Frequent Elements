@@ -1,0 +1,33 @@
+
+
+
+
+
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        
+        Map<Integer,Integer> map = new HashMap<>();
+        
+        for(int a : nums){
+            map.put(a,map.getOrDefault(a,0)+1);
+        }
+        
+        PriorityQueue<Integer> minheap = new PriorityQueue<>((a,b) -> map.get(a).equals(map.get(b))?
+                                                            Integer.compare(b,a): map.get(a)- map.get(b));
+        
+        for(int num : map.keySet()){
+            minheap.offer(num);
+            if(minheap.size()>k) minheap.remove();
+        }
+        
+        List<Integer> list  = new ArrayList<Integer>();
+        
+        while(!minheap.isEmpty()){
+            list.add(minheap.remove());
+        }
+        
+        System.out.println(list);
+        Collections.reverse(list);
+        return list;
+    }
+}

@@ -28,3 +28,46 @@ class Solution(object):
                 heapq.heappush(pq,temp)
         return [pair[1] for pair in pq] 
         
+        
+        
+# time cpomplexity - O(N)
+# Approach - Bucket SORT
+
+import heapq
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        map={}
+        bucket=[None for i in range(len(nums)+1)]
+        for i in nums:
+            if i in map:
+                map[i]+=1
+            else:
+                map[i]=1
+            
+            
+ 
+        
+        for key in map.keys():
+            freq=map[key]
+            if bucket[freq]==None:
+                bucket[freq]=[]
+            bucket[freq].append(key)
+            
+        res=[]
+        
+        for i in range(len(bucket)-1,0,-1):
+            if len(res)<k:
+                if bucket[i]!=None:
+                    res+=bucket[i]
+            else:
+                break
+        if len(res)<=k:
+            return res
+        return res[:k]
+                    
+            
+        
+        
+        
+        
+        

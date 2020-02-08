@@ -1,5 +1,15 @@
 
+TC: O(nlogk)
+SC: O(n)
 
+21 / 21 test cases passed.
+Status: Accepted
+Runtime: 172 ms
+Memory Usage: 41.2 MB
+
+Approach: First create a map with element as key and number of times as it value.If we use a minheap with size of k and if we keep
+adding the elements(key of map) based on the number of times it exists(value of the key) , eventually we will get a minheap with k element
+if we remove the top element whenever the size of minheap goes beyond k. Retreive the elements of minheap on to a list and return it.
 
 
 

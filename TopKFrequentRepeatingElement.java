@@ -24,11 +24,21 @@ import java.util.*;
  * 4.(Finally start traversing bucket in reverse direction.Also keep check size of bucket.If it  is less than K
  * add to result otherwise discard it
  * 
- *  
+ * 
+ * Bucket Sort is good for smaller or medium size array.For Large numbers or datea stream,usage of buckets can
+ * be wastage of space.This may not work well for time-sensitive application such as google search result
+ * 
+ * C.)  HashMap + QuickSelect
+ * 1.) The first step is to build a hash map element -> its frequency.This step takes O(N) time where N is number of elements in the list.
+ * 2.) Creation Frequency array to store frequency
+ * 3.) Apply Quick Select to find Kth Largest Frequency
+ * 4.) Run a simple loop to find numbers with frequency greater than kth largest frequency
  * 
  * 
  * */
 public class TopKFrequentRepeatingElement {
+    public static Random rand = new Random();
+
 	public List<Integer> topKFrequentHeap(int[] nums, int k) {
 		List<Integer> output = new ArrayList<>();
 		HashMap<Integer, Integer> map = new HashMap<>(k);
@@ -75,6 +85,66 @@ public class TopKFrequentRepeatingElement {
 			i--;
 		}
 		return output;
+    }
+    
+    public List<Integer> topKFrequentQuickSelect(int[] nums, int k) {
+		List<Integer> output = new ArrayList<>();
+		HashMap<Integer, Integer> map = new HashMap<>(k);
+		if (nums == null || nums.length == 0) {
+			return output;
+		}
+		for (int num : nums) {
+			map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        int frequency[] = new int[map.size()];
+        int index = 0;
+        for(final int value : map.values()){
+            frequency[index++] = value;
+        }
+        final int kthLargest = quickSelectRec(frequency,0,index - 1,index - k);
+        for(Map.Entry<Integer,Integer> entry: map.entrySet()){
+            if(entry.getValue() >= kthLargest){
+                output.add(entry.getKey());
+            }
+        }
+		return output;
+    }
+
+    public int quickSelectRec(int nums[], int low, int high, int k) {
+		if (low == high)
+			return nums[low];
+
+		int pivotIndex = low + rand.nextInt(high - low);
+
+		pivotIndex = findPivot(nums, low, high, pivotIndex);
+
+		if (k == pivotIndex)
+			return nums[k];
+		else if (k < pivotIndex)
+			return quickSelectRec(nums, low, pivotIndex - 1, k);
+		else
+			return quickSelectRec(nums, pivotIndex + 1, high, k);
+    }
+    
+    public static void swap(int[] nums, int i, int j) {
+		int temp = nums[i];
+		nums[i] = nums[j];
+		nums[j] = temp;
+	}
+
+	public int findPivot(int nums[], int low, int high, int pivotIndex) {
+
+		int pivot = nums[pivotIndex];
+		swap(nums, pivotIndex, high);
+		int pIndex = low;
+		for (int i = low; i < high; i++) {
+			if (nums[i] <= pivot) {
+				swap(nums, i, pIndex);
+				pIndex++;
+			}
+		}
+		swap(nums, pIndex, high);
+		return pIndex;
 	}
 
 	public static void main(String args[]) {
@@ -83,7 +153,8 @@ public class TopKFrequentRepeatingElement {
 
 		TopKFrequentRepeatingElement top = new TopKFrequentRepeatingElement();
 
-		System.out.print(top.topKFrequentHeap(nums, k));
-		System.out.print(top.topKFrequentBucket(nums, k));
+		System.out.println(top.topKFrequentHeap(nums, k));
+        System.out.println(top.topKFrequentBucket(nums, k));
+        System.out.println(top.topKFrequentQuickSelect(nums, k));
 	}
 }

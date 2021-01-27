@@ -1,3 +1,4 @@
+# HEAP APPROACH
 # TIME COMPLEXITY: O(n) + O(n log k)
 # SPACE COMPLEXITY: O(n)
 from heapq import *

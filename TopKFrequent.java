@@ -1,3 +1,6 @@
+// TC = O(N)
+//SC = O(N+K)
+//Here we are first making count map of the numbers in array. then using PQ to get filter K element.
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
         HashMap<Integer, Integer> map  = new HashMap<>();
